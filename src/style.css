@@ -1,0 +1,35 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    overflow: hidden;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+.section 
+{
+    position: relative; /* Sets the position property of elements to "relative" */
+    font-family: 'Cabin', sans-serif; /* Sets the font family for text in elements  */
+    color: #ffeded; /* Sets the text color to a shade of red in elements  */
+    font-size: 4vmin; /* Sets the font size based on 7% of the viewport's smaller dimension (width or height) */
+    padding-left: 4%; /* Adds left padding to the elements  */
+    padding-top: 3%; /* Adds top padding to the elements  */
+}
+
+.section a 
+{
+    color: #ffeded;
+    text-decoration: none; /* Remove the underline */
+}
