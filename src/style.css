@@ -16,6 +16,7 @@ body
     top: 0;
     left: 0;
     outline: none;
+    touch-action: none; /* Let the scene handle touch gestures instead of browser scrolling or pinch-to-zoom. */
 }
 
 .section 
@@ -26,10 +27,24 @@ body
     font-size: 4vmin; /* Sets the font size based on 7% of the viewport's smaller dimension (width or height) */
     padding-left: 4%; /* Adds left padding to the elements  */
     padding-top: 3%; /* Adds top padding to the elements  */
+    z-index: 2;
+    width: fit-content;
 }
 
-.section a 
+/* Works toggle */
+#works-toggle
 {
-    color: #ffeded;
-    text-decoration: none; /* Remove the underline */
+    appearance: none;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+    text-decoration: none;
 }

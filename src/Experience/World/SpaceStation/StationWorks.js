@@ -240,6 +240,10 @@ export default class StationWorks
     }
     onRaycasterClick()
     {
+        // Ignore station clicks while Works is active, so portfolio clicks do not also trigger background objects.
+        if (this.experience.works?.active) return
+
+        // Handle a click on the intersected station object.
         if(this.currentIntersect)
         {
             console.log('clicked on :' , this.currentIntersect.object.name)

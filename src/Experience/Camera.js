@@ -51,6 +51,6 @@ export default class Camera
     }
     update()
     {
-        this.controls.update()
+        if (!this.experience.works?.active) this.controls.update()
     }
 }

@@ -7,6 +7,7 @@ import Mouse from './Utils/Mouse.js'
 import Camera from './Camera.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
+import Works from './Works/Works.js'
 import Resources from './Utils/Resources.js'
 import sources from './sources.js'
 import PostProcessing from './Utils/PostProcessing.js'
@@ -62,6 +63,7 @@ export default class Experience
         // Time tick event
         this.resources.on('ready', () =>
         {
+            this.works = new Works(this)
             this.time.on('tick', () =>
             {
                 this.update()
@@ -73,6 +75,7 @@ export default class Experience
     resize()
     {
         this.camera.resize()
+        this.works?.resize()
         this.renderer.resize()
         this.postProcessing.resize()
     }
@@ -84,6 +87,7 @@ export default class Experience
         // this.mouse.update()
         this.camera.update()
         this.world.update()
+        this.works?.update()
 
         // Post Processing
         // pass postProcessing directly to the renderer
