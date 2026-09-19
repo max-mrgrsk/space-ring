@@ -1,5 +1,5 @@
 import Experience from '../Experience.js'
-import Animation from '../Utils/Animation.js'
+import Intro from '../Utils/CameraAnimations/Intro.js'
 
 // import Space Station
 import SpaceStation from './SpaceStation/SpaceStation.js'
@@ -36,7 +36,7 @@ export default class World
             this.sun = new Sun()
             this.satellites = new Satellites()
 
-            this.animation = new Animation()
+            this.intro = new Intro()
         })
     }
 

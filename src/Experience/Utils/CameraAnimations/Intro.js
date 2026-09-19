@@ -1,7 +1,7 @@
 import gsap from 'gsap' // animation. install command: npm install --save gsap@3.5.1
-import Experience from '../Experience'
+import Experience from '../../Experience'
 
-export default class Animation
+export default class Intro
 {
     constructor()
     {
