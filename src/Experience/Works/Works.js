@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
+import animateWorksCamera from '../Utils/CameraAnimations/Works.js'
 import createModels from './createModels.js'
 import createMascot from './createMascot.js'
 import createCategories from './categories.js'
@@ -321,22 +322,7 @@ export default class Works
     fly(position, quaternion, complete)
     {
         this.flight?.kill()
-        const startPosition = this.camera.position.clone()
-        const startQuaternion = this.camera.quaternion.clone()
-        const progress = { value: 0 }
-
-        this.flight = gsap.to(progress,
-        {
-            value: 1,
-            duration: 1.8,
-            ease: 'power2.inOut',
-            onUpdate: () =>
-            {
-                this.camera.position.lerpVectors(startPosition, position, progress.value)
-                this.camera.quaternion.slerpQuaternions(startQuaternion, quaternion, progress.value)
-            },
-            onComplete: complete
-        })
+        this.flight = animateWorksCamera(this.camera, position, quaternion, complete)
     }
 
     // Category navigation
