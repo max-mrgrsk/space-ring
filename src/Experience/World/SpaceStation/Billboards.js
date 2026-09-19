@@ -4,7 +4,7 @@ import Experience from '../../Experience'
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
-export default class StationWorks
+export default class Billboards
 {
     constructor()
     {

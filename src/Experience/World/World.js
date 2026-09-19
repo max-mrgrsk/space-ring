@@ -3,7 +3,7 @@ import Animation from '../Utils/Animation.js'
 
 // import Space Station
 import SpaceStation from './SpaceStation/SpaceStation.js'
-import StationWorks from './SpaceStation/StationWorks.js'
+import Billboards from './SpaceStation/Billboards.js'
 import SpaceCars from './SpaceStation/SpaceCars.js'
 import CanyonCars from './SpaceStation/CanyonCars.js'
 import Player from './SpaceStation/Player.js'
@@ -29,7 +29,7 @@ export default class World
             this.spaceStation = new SpaceStation()
             this.spaceCars = new SpaceCars()
             this.canyonCars = new CanyonCars
-            this.stationWorks = new StationWorks()
+            this.billboards = new Billboards()
             this.player = new Player()
 
             this.stars = new Stars()
@@ -43,7 +43,7 @@ export default class World
     update()
     {
         this.spaceStation.update()
-        this.stationWorks.update()
+        this.billboards.update()
         this.spaceCars.update()
         this.canyonCars.update()
         this.player.update()
