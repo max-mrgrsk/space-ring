@@ -2,12 +2,16 @@ import * as THREE from 'three'
 import Experience from '../../Experience'
 import onClick from '../../Utils/Click.js'
 import pickObject from '../../Utils/PickObject.js'
+import BillboardAnimation from '../../Utils/CameraAnimations/Billboards.js'
 
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
+// Builds and rotates the billboard objects, and handles clicks, links and the Back button.
+// CameraAnimations/Billboards.js owns the complete camera visit, including following and returning.
 export default class Billboards
 {
+    // Build the billboards and prepare their clicks, camera flights and Back button.
     constructor()
     {
         this.experience = new Experience()
@@ -23,6 +27,7 @@ export default class Billboards
         this.setGroup()
         this.setImages()
         this.setRaycaster()
+        this.setNavigation()
         this.setBoxes()
         this.setDebug()
     }
@@ -176,6 +181,8 @@ export default class Billboards
             this.group.add(this.worksMesh)
         }        
     }
+    // Prepare to find the billboard under the mouse and respond to deliberate clicks or taps.
+    // Dragging the view must not accidentally select a board.
     setRaycaster()
     {
         this.rayOrigin = new THREE.Vector3(-0.25,-2.3,0)
@@ -192,9 +199,9 @@ export default class Billboards
 
 
 
-        // Only a deliberate click or tap on the scene should open a billboard's website.
-        // The shared helper ignores drags and pinches; Works temporarily disables these clicks.
-        onClick(this.experience.canvas, event => this.onRaycasterClick(event), () => !this.experience.works?.active)
+        // A deliberate click or tap visits a billboard, or opens the one already being viewed.
+        // The shared helper ignores drags and pinches; Works and camera flights disable clicks.
+        onClick(this.experience.canvas, event => this.onRaycasterClick(event), () => this.canPick)
 
         // Handle touch start
         // window.addEventListener('touchstart', this.onRaycasterClick.bind(this));
@@ -204,14 +211,12 @@ export default class Billboards
 
 
     }
+    // Decide what a billboard click should do: visit a new board, or open the website of the one we are viewing.
+    // Example: the first click flies to the board; a separate click after arrival opens its website.
     onRaycasterClick(event)
     {
-        // Ignore station clicks while Works is active, so portfolio clicks do not also trigger background objects.
-        if (this.experience.works?.active) return
-
-        // Find the board under the actual click, including finger taps without a mouse hover.
-        // The shared helper finds the board; this file decides which website it opens.
-        this.currentIntersect = pickObject({
+        // Use the shared picker so mouse clicks and finger taps find the board at this position.
+        const hit = pickObject({
             x: event.clientX,
             y: event.clientY,
             canvas: this.experience.canvas,
@@ -219,16 +224,56 @@ export default class Billboards
             root: this.group,
             objects: this.imagesArray
         })
+        if(!hit) return
 
-        // Handle a click on the intersected station object.
-        if(this.currentIntersect)
+        // Only the board we are already viewing can open a website.
+        // The click helper blocks clicks during a flight, so arrival alone never opens a tab.
+        const clickedSelectedBillboard = hit.object === this.cameraAnimation.selectedBillboard
+        if(clickedSelectedBillboard)
         {
-            console.log('clicked on :' , this.currentIntersect.object.name)
-            // Each board carries its own website, so reordering the data list keeps its link correct.
-            const url = this.currentIntersect.object.userData.url
+            // Read the link belonging to this board, even if the data list has been reordered.
+            const url = hit.object.userData.url
             if(url) window.open(url, '_blank')
+            return
         }
+
+        // Clicking any other board flies there first; its website needs a separate click.
+        this.cameraAnimation.focusBillboard(hit.object)
+        this.button.textContent = '<back'
+        this.experience.canvas.style.cursor = ''
     }
+
+    // Prepare the camera visit and connect the Back button to its return journey.
+    // The animation owns the camera movement; this file owns the button and its label.
+    setNavigation()
+    {
+        this.cameraAnimation = new BillboardAnimation(this.experience)
+        // Reuse the existing .works button; it will show Back while we are visiting billboards.
+        this.button = document.querySelector('#works-toggle')
+        // This button already has a Works click handler. A Back click must return home without opening Works.
+        // The final true below makes this handler run before the normal Works click handler.
+        this.button.addEventListener('click', event =>
+        {
+            // At home, leave the click alone so the button can open Works as usual.
+            if(!this.cameraAnimation.active) return
+            // During a billboard visit, stop this click from also reaching the Works handler.
+            event.stopImmediatePropagation()
+            this.experience.canvas.style.cursor = ''
+            // Ask the animation to return to avenue. Change the button label only after arrival.
+            this.cameraAnimation.exit(() =>
+            {
+                this.button.textContent = '.works'
+            })
+        }, true)
+    }
+
+    // Decide whether a click may visit a billboard or open its website right now.
+    // Wait for any camera flight to finish, and let Works handle clicks while it is open.
+    get canPick()
+    {
+        return !this.experience.works?.active && !this.cameraAnimation.flight
+    }
+
     setBoxes()
     {
         /**
@@ -283,9 +328,15 @@ export default class Billboards
                 .onChange( () => {this.updateWorks()} )
         }
     }
+    // Keep the boards aligned with the rotating ring and highlight the one under the mouse.
+    // Show a hand cursor when that board can be clicked.
     update()
     {
         this.group.rotation.x = - this.time.elapsed * this.rotationSpeed
+        // Recalculate the boards' positions after the ring turns, before following a board or checking hover.
+        this.group.updateMatrixWorld(true)
+        // Let the camera animation follow the moving board, then check hover using the updated view.
+        this.cameraAnimation.update()
 
         /**
          * Raycaster
@@ -318,7 +369,9 @@ export default class Billboards
         // Let Works control its own cursor while open, including its camera transitions.
         if(!this.experience.works?.active)
         {
-            this.experience.canvas.style.cursor = this.currentIntersect ? 'pointer' : ''
+            // Flights temporarily disable clicks, so hide the hand until the camera arrives.
+            const showHandCursor = this.canPick && this.currentIntersect
+            this.experience.canvas.style.cursor = showHandCursor ? 'pointer' : ''
         }
     }
 }
