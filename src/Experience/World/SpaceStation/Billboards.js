@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
+import onClick from '../../Utils/Click.js'
 
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -201,8 +202,9 @@ export default class Billboards
 
 
 
-        // Handle mouse click
-        window.addEventListener('click', this.onRaycasterClick.bind(this));
+        // Only a deliberate click or tap on the scene should open a billboard's website.
+        // The shared helper ignores drags and pinches; Works temporarily disables these clicks.
+        onClick(this.experience.canvas, event => this.onRaycasterClick(event), () => !this.experience.works?.active)
 
         // Handle touch start
         // window.addEventListener('touchstart', this.onRaycasterClick.bind(this));
@@ -238,10 +240,22 @@ export default class Billboards
         //     }
         // )
     }
-    onRaycasterClick()
+    onRaycasterClick(event)
     {
         // Ignore station clicks while Works is active, so portfolio clicks do not also trigger background objects.
         if (this.experience.works?.active) return
+
+        // Find the board under the actual click, including finger taps without a mouse hover.
+        // The helper recognizes the click; this file decides which billboard's website to open.
+        const rect = this.experience.canvas.getBoundingClientRect()
+        const pointer = new THREE.Vector2(
+            (event.clientX - rect.left) / rect.width * 2 - 1,
+            -(event.clientY - rect.top) / rect.height * 2 + 1
+        )
+        this.group.updateMatrixWorld(true)
+        this.camera.updateMatrixWorld()
+        this.raycaster.setFromCamera(pointer, this.camera)
+        this.currentIntersect = this.raycaster.intersectObjects(this.imagesArray)[0] || null
 
         // Handle a click on the intersected station object.
         if(this.currentIntersect)
