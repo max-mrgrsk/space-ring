@@ -29,24 +29,10 @@ export default class Billboards
     setTextures()
     {
         this.resources = this.experience.resources
-        this.textures = [
-            this.resources.items.astanaexpo,        //0
-            this.resources.items.etb,               //1
-            this.resources.items.freiburg,          //2
-            this.resources.items.kehl,
-            this.resources.items.moscase1,
-            this.resources.items.moscase2,
-            this.resources.items.nn,
-            this.resources.items.pavilionkarsruhe,
-            this.resources.items.petriplatz,
-            this.resources.items.photography,
-            this.resources.items.raw,
-            this.resources.items.rkm,
-            this.resources.items.tischtennis,
-            this.resources.items.waldsee,
-            this.resources.items.warhammer,
-            this.resources.items.woodworking
-        ]
+        // Only texture entries with a website link become billboards.
+        // Read the same sources used by the loader, so each image stays paired with its link.
+        this.billboardSources = this.resources.sources.filter(source => source.type === 'texture' && source.url)
+        this.textures = this.billboardSources.map(source => this.resources.items[source.name])
 
         // Set sRGB encoding for each texture
         this.textures.forEach(texture => {
@@ -162,17 +148,20 @@ export default class Billboards
             this.parameters.worksSize)
         
         this.imagesArray = []
-        for(let i=0; i < this.textures.length; i++)
+        // Build each board from its own entry; i is only used to place it around the ring.
+        for(const [i, billboard] of this.billboardSources.entries())
         {
             // 1. Material
-            this.texture = this.textures[i]
+            this.texture = this.resources.items[billboard.name]
             this.worksMaterial = new THREE.MeshBasicMaterial({ 
                 map: this.texture,
                 side: THREE.DoubleSide })
 
             // 2. Mesh
             this.worksMesh = new THREE.Mesh( this.worksPlaneGeometry, this.worksMaterial )
-            this.worksMesh.name = i;
+            this.worksMesh.name = billboard.name;
+            // Keep the website on the board itself, so opening it never depends on a list position.
+            this.worksMesh.userData.url = billboard.url
             
             // 3. Position
             this.worksMesh.position.x = this.parameters.positionX[i]
@@ -214,32 +203,6 @@ export default class Billboards
 
 
 
-        // window.addEventListener
-        // (
-        //     'click', () =>
-        //     {
-        //         if(this.currentIntersect)
-        //         {
-        //             console.log('clicked on :' , this.currentIntersect.object.name)
-        //             if(this.currentIntersect.object.name === 0){window.open('https://jmayerh.de/astana-expo-2017/', '_blank')}
-        //             if(this.currentIntersect.object.name === 1){window.open('https://jmayerh.de/extension-on-top-of-the-kleine-grosz-museum-at-tankstelle-bulowstrasse/', '_blank')}
-        //             if(this.currentIntersect.object.name === 2){window.open('https://jmayerh.de/pavilion-on-europaplatz/', '_blank')}
-        //             if(this.currentIntersect.object.name === 3){window.open('https://jmayerh.de/tram-stop/', '_blank')}
-        //             if(this.currentIntersect.object.name === 4){window.open('http://moscase.com', '_blank')}
-        //             if(this.currentIntersect.object.name === 5){window.open('http://moscase.com', '_blank')}
-        //             if(this.currentIntersect.object.name === 6){window.open('https://jmayerh.de/n-n-residence-near-moscow/', '_blank')}
-        //             if(this.currentIntersect.object.name === 7){window.open('https://jmayerh.de/pavilion-ka300/', '_blank')}
-        //             if(this.currentIntersect.object.name === 8){window.open('https://jmayerh.de/house-of-prayer-and-learning/', '_blank')}
-        //             if(this.currentIntersect.object.name === 9){window.open('https://www.instagram.com/superb.berlin/', '_blank')}
-        //             if(this.currentIntersect.object.name === 10){window.open('https://jmayerh.de/raw/', '_blank')}
-        //             if(this.currentIntersect.object.name === 11){window.open('https://jmayerh.de/zipper-rkm-740/', '_blank')}
-        //             if(this.currentIntersect.object.name === 12){window.open('https://jmayerh.de/table-tennis-table/?n=1861', '_blank')}
-        //             if(this.currentIntersect.object.name === 13){window.open('https://jmayerh.de/strukturalien/', '_blank')}
-        //             if(this.currentIntersect.object.name === 14){window.open('https://www.instagram.com/superb.berlin/', '_blank')}
-        //             if(this.currentIntersect.object.name === 15){window.open('https://www.youtube.com/watch?v=hs4sur3MTwM&t=12s', '_blank')}
-        //         }
-        //     }
-        // )
     }
     onRaycasterClick(event)
     {
@@ -261,22 +224,9 @@ export default class Billboards
         if(this.currentIntersect)
         {
             console.log('clicked on :' , this.currentIntersect.object.name)
-            if(this.currentIntersect.object.name === 0){window.open('https://jmayerh.de/astana-expo-2017/', '_blank')}
-            if(this.currentIntersect.object.name === 1){window.open('https://jmayerh.de/extension-on-top-of-the-kleine-grosz-museum-at-tankstelle-bulowstrasse/', '_blank')}
-            if(this.currentIntersect.object.name === 2){window.open('https://jmayerh.de/pavilion-on-europaplatz/', '_blank')}
-            if(this.currentIntersect.object.name === 3){window.open('https://jmayerh.de/tram-stop/', '_blank')}
-            if(this.currentIntersect.object.name === 4){window.open('http://moscase.com', '_blank')}
-            if(this.currentIntersect.object.name === 5){window.open('http://moscase.com', '_blank')}
-            if(this.currentIntersect.object.name === 6){window.open('https://jmayerh.de/n-n-residence-near-moscow/', '_blank')}
-            if(this.currentIntersect.object.name === 7){window.open('https://jmayerh.de/pavilion-ka300/', '_blank')}
-            if(this.currentIntersect.object.name === 8){window.open('https://jmayerh.de/house-of-prayer-and-learning/', '_blank')}
-            if(this.currentIntersect.object.name === 9){window.open('https://www.instagram.com/superb.berlin/', '_blank')}
-            if(this.currentIntersect.object.name === 10){window.open('https://jmayerh.de/raw/', '_blank')}
-            if(this.currentIntersect.object.name === 11){window.open('https://jmayerh.de/zipper-rkm-740/', '_blank')}
-            if(this.currentIntersect.object.name === 12){window.open('https://jmayerh.de/table-tennis-table/?n=1861', '_blank')}
-            if(this.currentIntersect.object.name === 13){window.open('https://jmayerh.de/strukturalien/', '_blank')}
-            if(this.currentIntersect.object.name === 14){window.open('https://www.instagram.com/superb.berlin/', '_blank')}
-            if(this.currentIntersect.object.name === 15){window.open('https://www.youtube.com/watch?v=hs4sur3MTwM&t=12s', '_blank')}
+            // Each board carries its own website, so reordering the data list keeps its link correct.
+            const url = this.currentIntersect.object.userData.url
+            if(url) window.open(url, '_blank')
         }
     }
     setBoxes()
