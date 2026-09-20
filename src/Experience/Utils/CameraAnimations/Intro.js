@@ -19,6 +19,8 @@ export default class Intro
     // Fly into the avenue, moving both the camera and the point it looks at.
     setAnimation()
     {
+        // Billboards wait until this is false. Include the delay before the camera starts moving.
+        this.active = true
         if(this.debug.active)
         {
             this.delay = 0
@@ -47,6 +49,16 @@ export default class Intro
                 x: this.avenueView.target.x,
                 y: this.avenueView.target.y,
                 z: this.avenueView.target.z,
+                // Both parts of the intro have arrived; billboard clicks can now begin.
+                onComplete: () =>
+                {
+                    this.active = false
+                },
+                // Opening Works can stop the intro early. Back must still leave billboards clickable.
+                onInterrupt: () =>
+                {
+                    this.active = false
+                }
             })
     }
 }

@@ -200,7 +200,7 @@ export default class Billboards
 
 
         // A deliberate click or tap visits a billboard, or opens the one already being viewed.
-        // The shared helper ignores drags and pinches; Works and camera flights disable clicks.
+        // The shared helper ignores drags and pinches; canPick decides when clicks are allowed.
         onClick(this.experience.canvas, event => this.onRaycasterClick(event), () => this.canPick)
 
         // Handle touch start
@@ -268,10 +268,11 @@ export default class Billboards
     }
 
     // Decide whether a click may visit a billboard or open its website right now.
-    // Wait for any camera flight to finish, and let Works handle clicks while it is open.
+    // Wait for the intro and billboard flights to finish, and let Works handle clicks while it is open.
+    // Use this same rule for clicks and hover, so a board only looks clickable when it really is.
     get canPick()
     {
-        return !this.experience.works?.active && !this.cameraAnimation.flight
+        return !this.experience.world.intro.active && !this.experience.works?.active && !this.cameraAnimation.flight
     }
 
     setBoxes()
@@ -343,7 +344,7 @@ export default class Billboards
          */
 
         this.raycaster.setFromCamera(this.mouse, this.camera)
-        this.intersects = this.raycaster.intersectObjects(this.imagesArray)
+        this.intersects = this.canPick ? this.raycaster.intersectObjects(this.imagesArray) : []
         
         // reset color
         for(const image of this.imagesArray)
@@ -369,9 +370,7 @@ export default class Billboards
         // Let Works control its own cursor while open, including its camera transitions.
         if(!this.experience.works?.active)
         {
-            // Flights temporarily disable clicks, so hide the hand until the camera arrives.
-            const showHandCursor = this.canPick && this.currentIntersect
-            this.experience.canvas.style.cursor = showHandCursor ? 'pointer' : ''
+            this.experience.canvas.style.cursor = this.currentIntersect ? 'pointer' : ''
         }
     }
 }

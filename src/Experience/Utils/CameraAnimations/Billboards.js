@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import gsap from 'gsap'
 import flyTo from './flyTo.js'
 import flyToAvenue from './flyToAvenue.js'
 
@@ -32,20 +31,12 @@ export default class BillboardAnimation
     }
 
     // Show the chosen billboard up close and follow it as the ring keeps turning.
-    // On the first visit, end any unfinished intro and start following from the current camera view.
+    // On the first visit, start following from the current camera view.
     focusBillboard(billboard)
     {
-        // Wait for the current flight to finish, and do not fly again to the board already in view.
-        const canFlyToBillboard = !this.flight && billboard !== this.selectedBillboard
-        if(!canFlyToBillboard) return
-
         const isFirstBillboardVisit = !this.active
         if(isFirstBillboardVisit)
         {
-            // End any unfinished intro, including its initial delay.
-            // Otherwise the intro would keep moving the camera while the billboard flight also tries to move it.
-            gsap.killTweensOf(this.camera.position)
-            gsap.killTweensOf(this.controls.target)
             // Start the viewpoint exactly where the camera is now. The board's parent is the rotating group.
             // attach() puts the viewpoint inside that group without changing its visible position.
             this.cameraView.position.copy(this.camera.position)
