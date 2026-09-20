@@ -363,5 +363,12 @@ export default class Billboards
             // if(this.currentIntersect){console.log('mosue leave')}
             this.currentIntersect = null
         }
+
+        // A hand shows that the billboard is clickable; empty space uses the normal cursor.
+        // Let Works control its own cursor while open, including its camera transitions.
+        if(!this.experience.works?.active)
+        {
+            this.experience.canvas.style.cursor = this.currentIntersect ? 'pointer' : ''
+        }
     }
 }
