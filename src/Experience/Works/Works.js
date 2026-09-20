@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 import flyTo from '../Utils/CameraAnimations/flyTo.js'
+import flyToAvenue from '../Utils/CameraAnimations/flyToAvenue.js'
 import pickObject from '../Utils/PickObject.js'
 import createModels from './createModels.js'
 import createMascot from './createMascot.js'
@@ -248,6 +249,7 @@ export default class Works
         this.active ? this.exit() : this.enter()
     }
 
+    // Open Works and stop any unfinished intro. Back will return to avenue instead of resuming it.
     enter()
     {
         if(this.state !== 'home')
@@ -255,15 +257,10 @@ export default class Works
             return
         }
 
-        this.saved = {
-            position: this.camera.position.clone(),
-            quaternion: this.camera.quaternion.clone(),
-            target: this.controls.target.clone(),
-            enabled: this.controls.enabled
-        }
-
-        this.pausedTweens = gsap.getTweensOf([this.camera.position, this.controls.target]).filter(tween => !tween.paused())
-        this.pausedTweens.forEach(tween => tween.pause())
+        // End both parts of the intro, including its initial delay, so it cannot move the camera later.
+        // Without these lines, the intro would keep moving the camera while the Works animation also tries to move it.
+        gsap.killTweensOf(this.camera.position)
+        gsap.killTweensOf(this.controls.target)
         this.controls.enabled = false
 
         this.state = 'entering'
@@ -291,9 +288,12 @@ export default class Works
         })
     }
 
+    // Leave Works and fly to the avenue view where the intro finishes, wherever we entered from.
     exit()
     {
-        if(this.state === 'home' || this.state === 'exiting')
+        // Ignore a second Back click during the return flight, or any Back click when Works is already closed.
+        const canReturnToAvenue = this.state !== 'home' && this.state !== 'exiting'
+        if(!canReturnToAvenue)
         {
             return
         }
@@ -307,14 +307,17 @@ export default class Works
         this.drag = null
         this.cards.forEach(({ model }) => gsap.killTweensOf(model.rotation))
 
-        this.fly(this.saved.position, this.saved.quaternion, () =>
+        // Stop the incoming flight if Back was clicked before Works arrived.
+        this.flight?.kill()
+        // The shared animation takes us to avenue and prepares the mouse controls for that view.
+        // Works only handles closing the portfolio once we arrive.
+        this.flight = flyToAvenue(this.camera, this.controls, this.experience.world.spaceStation.parameters, () =>
         {
-            this.controls.target.copy(this.saved.target)
-            this.controls.enabled = this.saved.enabled
+            // We have reached avenue; mouse controls can be used again.
+            this.controls.enabled = true
             this.state = 'home'
             this.root.visible = false
             this.button.textContent = '.works'
-            this.pausedTweens.forEach(tween => tween.resume())
         })
     }
 
