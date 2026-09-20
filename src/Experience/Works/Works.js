@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 import animateWorksCamera from '../Utils/CameraAnimations/Works.js'
+import pickObject from '../Utils/PickObject.js'
 import createModels from './createModels.js'
 import createMascot from './createMascot.js'
 import createCategories from './categories.js'
@@ -74,8 +75,6 @@ export default class Works
         // Pointer picking
         // Find which 3D label the pointer is over, for the hand cursor and link clicks.
         this.labels = this.cards.map(card => card.label)
-        this.raycaster = new THREE.Raycaster()
-        this.pointer = new THREE.Vector2()
 
         // Input events
         // Respond to clicks, scrolling, dragging, and touch gestures.
@@ -354,12 +353,17 @@ export default class Works
     // Label picking
     labelAt(x, y)
     {
-        const rect = this.canvas.getBoundingClientRect()
-        this.pointer.set((x - rect.left) / rect.width * 2 - 1, -(y - rect.top) / rect.height * 2 + 1)
-        this.root.updateMatrixWorld(true)
-        this.camera.updateMatrixWorld()
-        this.raycaster.setFromCamera(this.pointer, this.camera)
-        return this.raycaster.intersectObjects(this.labels, false)[0]?.object
+        // Use the same position check as Billboards, for both the hand cursor and label clicks.
+        // Only labels can be picked here; Works still decides which link a label opens.
+        return pickObject({
+            x,
+            y,
+            canvas: this.canvas,
+            camera: this.camera,
+            root: this.root,
+            objects: this.labels,
+            recursive: false
+        })?.object
     }
 
     updateHover()

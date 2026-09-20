@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
 import onClick from '../../Utils/Click.js'
+import pickObject from '../../Utils/PickObject.js'
 
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -246,16 +247,15 @@ export default class Billboards
         if (this.experience.works?.active) return
 
         // Find the board under the actual click, including finger taps without a mouse hover.
-        // The helper recognizes the click; this file decides which billboard's website to open.
-        const rect = this.experience.canvas.getBoundingClientRect()
-        const pointer = new THREE.Vector2(
-            (event.clientX - rect.left) / rect.width * 2 - 1,
-            -(event.clientY - rect.top) / rect.height * 2 + 1
-        )
-        this.group.updateMatrixWorld(true)
-        this.camera.updateMatrixWorld()
-        this.raycaster.setFromCamera(pointer, this.camera)
-        this.currentIntersect = this.raycaster.intersectObjects(this.imagesArray)[0] || null
+        // The shared helper finds the board; this file decides which website it opens.
+        this.currentIntersect = pickObject({
+            x: event.clientX,
+            y: event.clientY,
+            canvas: this.experience.canvas,
+            camera: this.camera,
+            root: this.group,
+            objects: this.imagesArray
+        })
 
         // Handle a click on the intersected station object.
         if(this.currentIntersect)
