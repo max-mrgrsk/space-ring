@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
-import animateWorksCamera from '../Utils/CameraAnimations/Works.js'
+import flyTo from '../Utils/CameraAnimations/flyTo.js'
 import pickObject from '../Utils/PickObject.js'
 import createModels from './createModels.js'
 import createMascot from './createMascot.js'
@@ -318,10 +318,11 @@ export default class Works
         })
     }
 
+    // Stop any previous Works flight, then use the shared animation to move to this view.
     fly(position, quaternion, complete)
     {
         this.flight?.kill()
-        this.flight = animateWorksCamera(this.camera, position, quaternion, complete)
+        this.flight = flyTo(this.camera, position, quaternion, complete)
     }
 
     // Category navigation
