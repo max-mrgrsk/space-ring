@@ -3,7 +3,7 @@ import flyTo from './flyTo.js'
 import flyToAvenue from './flyToAvenue.js'
 
 // Own the whole camera visit: approach a billboard, follow it as the ring turns, and return to avenue.
-// The world file handles the boards, clicks, website links and Back button.
+// The world file handles boards and website clicks. State.js chooses trips and manages input and the button.
 export default class BillboardAnimation
 {
     // Prepare the camera and remember the current visit in one place.
@@ -17,24 +17,15 @@ export default class BillboardAnimation
         // An invisible viewpoint can ride with the ring while the real camera stays in the main scene.
         // Animating this viewpoint lets us approach a board that is still moving.
         this.cameraView = new THREE.Object3D()
-        // No camera flight is running yet. We keep the animation here so Back can stop it mid-flight.
-        this.flight = null
-        // This becomes true during the trip to the avenue, so repeated Back clicks do not restart it.
-        this.returning = false
     }
 
-    // Report whether we are visiting billboards, including the flights there and back.
-    // A selected board means the visit is still open; Back clears it when we arrive at avenue.
-    get active()
+    // Visit the board already selected by the click handler, and follow it as the ring keeps turning.
+    // State.js only asks us to enter; it does not need to know which board was clicked.
+    enter(complete)
     {
-        return this.selectedBillboard !== null
-    }
-
-    // Show the chosen billboard up close and follow it as the ring keeps turning.
-    // On the first visit, start following from the current camera view.
-    focusBillboard(billboard)
-    {
-        const isFirstBillboardVisit = !this.active
+        const billboard = this.selectedBillboard
+        // An unattached viewpoint means we are starting a visit, rather than moving between boards.
+        const isFirstBillboardVisit = this.cameraView.parent === null
         if(isFirstBillboardVisit)
         {
             // Start the viewpoint exactly where the camera is now. The board's parent is the rotating group.
@@ -44,37 +35,21 @@ export default class BillboardAnimation
             billboard.parent.attach(this.cameraView)
         }
 
-        this.selectedBillboard = billboard
-        // Keep mouse camera controls off throughout the flight and the billboard visit.
-        this.controls.enabled = false
-        this.flight = flyToBillboard(this.camera, billboard, this.cameraView, () =>
-        {
-            // Arrival ends the flight. Following the ring continues, and a new click can open the website.
-            this.flight = null
-        })
+        // Report arrival after the approach. Following the ring continues in update().
+        flyToBillboard(this.camera, billboard, this.cameraView, complete)
     }
 
     // Leave the billboard visit and fly to the same avenue view where the intro finishes.
-    // Stop following first; once we reach avenue, turn mouse controls on and tell the caller we arrived.
+    // Stop following first; once we reach avenue, close the visit and tell the caller we arrived.
     exit(complete)
     {
-        // Ignore a second Back click during the return flight, or Back when no billboard visit is open.
-        const canReturnToAvenue = this.active && !this.returning
-        if(!canReturnToAvenue) return
-        this.returning = true
-        // Stop the current animation before starting the return trip.
-        this.flight?.kill()
         // Leave the ring at the camera's current visible position before flying to avenue.
         this.cameraView.removeFromParent()
         // Use the same return journey as Works; the helper also clears leftover mouse movement.
-        this.flight = flyToAvenue(this.camera, this.controls, this.stationParameters, () =>
+        flyToAvenue(this.camera, this.controls, this.stationParameters, () =>
         {
-            // We have reached avenue: restore mouse controls and close the camera visit.
-            this.controls.enabled = true
+            // Clear the selected object before reporting that we have reached station.
             this.selectedBillboard = null
-            this.returning = false
-            this.flight = null
-            // Let the world file change its Back button to .works now that the return is finished.
             complete()
         })
     }
@@ -86,9 +61,8 @@ export default class BillboardAnimation
         // cameraView is an invisible marker that moves with the ring.
         // The flight moves this marker toward the chosen board; after arrival it stays in front of it.
         // Make the real camera follow the marker every frame, so the board stays in front of us.
-        // Only do this during a billboard visit, until Back starts the return to avenue.
-        // Otherwise following the marker would pull the camera away from the return flight.
-        const shouldFollowBillboard = this.active && !this.returning
+        // Back removes the marker from the ring, so following stops before the return flight begins.
+        const shouldFollowBillboard = this.cameraView.parent !== null
         if(shouldFollowBillboard)
         {
             // Move the real camera to the marker's position, including the ring's rotation.

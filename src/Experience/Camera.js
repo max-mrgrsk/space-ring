@@ -52,13 +52,8 @@ export default class Camera
     // Keep the home view responsive to mouse controls, while leaving billboard and Works views undisturbed.
     update()
     {
-        // Example: you click a billboard on your right, and the animation turns the camera toward it.
-        // The normal controls still aim at where you were looking before. Their update() could turn
-        // the camera away from the billboard again, even without you moving the mouse.
-        // So billboard viewing sets controls.enabled to false, and this check skips their update().
-        // Let the flight and billboard following position the camera until Back returns us home.
-        // Works also moves the camera itself, so we skip normal controls while Works is open.
-        const canUpdateControls = this.controls.enabled && !this.experience.works?.active
-        if (canUpdateControls) this.controls.update()
+        // State.js enables these controls only for the settled station view.
+        // Updating them while disabled could turn the camera away from an animation or the billboard we are viewing.
+        if (this.controls.enabled) this.controls.update()
     }
 }

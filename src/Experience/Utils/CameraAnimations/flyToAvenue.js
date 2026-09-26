@@ -3,7 +3,7 @@ import flyTo from './flyTo.js'
 import { avenue } from './namedViews.js'
 
 // Fly back to the avenue view where the intro finishes, and prepare mouse controls for that view.
-// Works and billboards can share this trip; each caller handles its own buttons and re-enables controls on arrival.
+// Works and billboards finish closing on arrival; the state manager then applies the station recipe.
 export default function flyToAvenue(camera, controls, stationParameters, complete)
 {
     const avenueView = avenue(stationParameters)
@@ -24,7 +24,7 @@ export default function flyToAvenue(camera, controls, stationParameters, complet
         camera.position.copy(avenueView.position)
         camera.quaternion.copy(quaternion)
         controls.target.copy(avenueView.target)
-        // The camera is ready. Let the caller turn controls on and finish closing its view.
+        // The camera is ready. Let the caller finish closing its objects and report arrival.
         complete()
     })
 }

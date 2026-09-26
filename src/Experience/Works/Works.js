@@ -21,8 +21,7 @@ export default class Works
         this.controls = experience.camera.controls
         this.canvas = experience.canvas
 
-        // View state
-        this.state = 'home'
+        // Scroll position within the portfolio
         this.targetScroll = 0
         this.scroll = 0
         this.section = -1
@@ -33,7 +32,6 @@ export default class Works
         // Match the settled intro view: camera at z=0.03 looks forward along -Z.
         // Move the presentation in front of that view, rather than turning toward the sun.
         this.root.position.set(0, 0, VIEW.presentationZ)
-        this.root.visible = false
         experience.scene.add(this.root)
 
         // Models
@@ -42,7 +40,6 @@ export default class Works
 
         // Labels
         this.narrow = this.camera.aspect < 1
-        this.button = document.querySelector('#works-toggle')
 
         this.cards = createCategories({ engineering: mascot, ...this.models }).map((category, index) =>
         {
@@ -77,37 +74,25 @@ export default class Works
         // Find which 3D label the pointer is over, for the hand cursor and link clicks.
         this.labels = this.cards.map(card => card.label)
 
-        // Input events
-        // Respond to clicks, scrolling, dragging, and touch gestures.
-        this.button.addEventListener('click', event =>
-        {
-            event.stopPropagation()
-            this.toggle()
-        })
-
         // Scrolling
         window.addEventListener('wheel', event =>
         {
-            if(!this.active)
+            if(!this.canScroll)
             {
                 return
             }
 
             event.preventDefault()
-            if(this.state !== 'works')
-            {
-                return
-            }
-
             const pixels = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1)
             this.move(pixels / innerHeight * scrollStep)
         }, { passive: false })
 
         // Dragging and link activation
-        // Start tracking a drag or tap.
+        // Start tracking a drag or tap. Scrolling can stay on even when website clicks are off.
         this.canvas.addEventListener('pointerdown', event =>
         {
-            if(this.state !== 'works' || event.button !== 0)
+            const canUsePointer = this.canScroll || this.canInteract
+            if(!canUsePointer || event.button !== 0)
             {
                 return
             }
@@ -150,7 +135,7 @@ export default class Works
             const dy = this.drag.y - event.clientY
             this.drag.moved ||= Math.hypot(event.clientX - this.drag.startX, event.clientY - this.drag.startY) > 6
             this.drag.y = event.clientY
-            if(this.state === 'works')
+            if(this.canScroll)
             {
                 this.move(dy / innerHeight * scrollStep)
             }
@@ -171,7 +156,7 @@ export default class Works
             {
                 this.canvas.releasePointerCapture(event.pointerId)
             }
-            if(click && this.state === 'works')
+            if(click && this.canInteract)
             {
                 this.openLabel(event)
             }
@@ -202,9 +187,16 @@ export default class Works
         this.resize()
     }
 
-    get active()
+    // Use the dashboard's click setting. Hidden Works labels must never open a website.
+    get canInteract()
     {
-        return this.state !== 'home'
+        return this.root.visible && this.experience.stateManager.settings.works.clickable
+    }
+
+    // Scroll mode moves the Works objects with a wheel or drag, while camera rotation stays disabled.
+    get canScroll()
+    {
+        return this.root.visible && this.experience.stateManager.settings.controls === 'scroll'
     }
 
     // Responsive layout
@@ -243,33 +235,11 @@ export default class Works
         return THREE.MathUtils.lerp(this.cards[index].offset, this.cards[next].offset, progress - index)
     }
 
-    // Mode transitions
-    toggle()
+    // Prepare the portfolio objects and fly to them. State.js handles input and the button.
+    enter(complete)
     {
-        this.active ? this.exit() : this.enter()
-    }
-
-    // Open Works and stop any unfinished intro. Back will return to avenue instead of resuming it.
-    enter()
-    {
-        if(this.state !== 'home')
-        {
-            return
-        }
-
-        // End both parts of the intro, including its initial delay, so it cannot move the camera later.
-        // Without these lines, the intro would keep moving the camera while the Works animation also tries to move it.
-        gsap.killTweensOf(this.camera.position)
-        gsap.killTweensOf(this.controls.target)
-        this.controls.enabled = false
-
-        this.state = 'entering'
-        this.canvas.style.cursor = ''
-        this.button.textContent = '<back'
-
         this.targetScroll = this.scroll = 0
         this.root.position.y = 0
-        this.root.visible = true
         this.section = -1
         this.cards.forEach(({ model }) =>
         {
@@ -281,25 +251,16 @@ export default class Works
         const targetQuaternion = new THREE.Quaternion().setFromRotationMatrix(
             new THREE.Matrix4().lookAt(targetPosition, new THREE.Vector3(0, 0, -1), this.camera.up)
         )
-        this.fly(targetPosition, targetQuaternion, () =>
+        flyTo(this.camera, targetPosition, targetQuaternion, () =>
         {
-            this.state = 'works'
             this.updateSection()
+            complete()
         })
     }
 
     // Leave Works and fly to the avenue view where the intro finishes, wherever we entered from.
-    exit()
+    exit(complete)
     {
-        // Ignore a second Back click during the return flight, or any Back click when Works is already closed.
-        const canReturnToAvenue = this.state !== 'home' && this.state !== 'exiting'
-        if(!canReturnToAvenue)
-        {
-            return
-        }
-
-        this.state = 'exiting'
-        this.canvas.style.cursor = ''
         if(this.drag && this.canvas.hasPointerCapture(this.drag.id))
         {
             this.canvas.releasePointerCapture(this.drag.id)
@@ -307,25 +268,8 @@ export default class Works
         this.drag = null
         this.cards.forEach(({ model }) => gsap.killTweensOf(model.rotation))
 
-        // Stop the incoming flight if Back was clicked before Works arrived.
-        this.flight?.kill()
-        // The shared animation takes us to avenue and prepares the mouse controls for that view.
-        // Works only handles closing the portfolio once we arrive.
-        this.flight = flyToAvenue(this.camera, this.controls, this.experience.world.spaceStation.parameters, () =>
-        {
-            // We have reached avenue; mouse controls can be used again.
-            this.controls.enabled = true
-            this.state = 'home'
-            this.root.visible = false
-            this.button.textContent = '.works'
-        })
-    }
-
-    // Stop any previous Works flight, then use the shared animation to move to this view.
-    fly(position, quaternion, complete)
-    {
-        this.flight?.kill()
-        this.flight = flyTo(this.camera, position, quaternion, complete)
+        // State.js keeps Works visible during the return and hides it when this animation reports arrival.
+        flyToAvenue(this.camera, this.controls, this.experience.world.spaceStation.parameters, complete)
     }
 
     // Category navigation
@@ -372,7 +316,7 @@ export default class Works
 
     updateHover()
     {
-        const hit = this.pointerClient && !this.drag && this.state === 'works' &&
+        const hit = this.canInteract && this.pointerClient && !this.drag &&
             this.labelAt(this.pointerClient.x, this.pointerClient.y)
         this.canvas.style.cursor = hit ? 'pointer' : ''
     }
@@ -389,7 +333,7 @@ export default class Works
     // Animation
     update()
     {
-        if(this.state !== 'works')
+        if(!this.canScroll && !this.canInteract)
         {
             return
         }

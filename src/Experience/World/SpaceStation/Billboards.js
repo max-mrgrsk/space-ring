@@ -7,11 +7,11 @@ import BillboardAnimation from '../../Utils/CameraAnimations/Billboards.js'
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
-// Builds and rotates the billboard objects, and handles clicks, links and the Back button.
+// Builds and rotates billboard objects, opens their links, and asks State.js to visit a clicked board.
 // CameraAnimations/Billboards.js owns the complete camera visit, including following and returning.
 export default class Billboards
 {
-    // Build the billboards and prepare their clicks, camera flights and Back button.
+    // Build the billboards and prepare their clicks and camera animation.
     constructor()
     {
         this.experience = new Experience()
@@ -27,7 +27,7 @@ export default class Billboards
         this.setGroup()
         this.setImages()
         this.setRaycaster()
-        this.setNavigation()
+        this.cameraAnimation = new BillboardAnimation(this.experience)
         this.setBoxes()
         this.setDebug()
     }
@@ -237,42 +237,17 @@ export default class Billboards
             return
         }
 
-        // Clicking any other board flies there first; its website needs a separate click.
-        this.cameraAnimation.focusBillboard(hit.object)
-        this.button.textContent = '<back'
-        this.experience.canvas.style.cursor = ''
+        // Remember the chosen board here; the shared state manager only needs the destination view.
+        // Its website still needs a separate click after arrival.
+        this.cameraAnimation.selectedBillboard = hit.object
+        this.experience.stateManager.goTo('billboard')
     }
 
-    // Prepare the camera visit and connect the Back button to its return journey.
-    // The animation owns the camera movement; this file owns the button and its label.
-    setNavigation()
-    {
-        this.cameraAnimation = new BillboardAnimation(this.experience)
-        // Reuse the existing .works button; it will show Back while we are visiting billboards.
-        this.button = document.querySelector('#works-toggle')
-        // This button already has a Works click handler. A Back click must return home without opening Works.
-        // The final true below makes this handler run before the normal Works click handler.
-        this.button.addEventListener('click', event =>
-        {
-            // At home, leave the click alone so the button can open Works as usual.
-            if(!this.cameraAnimation.active) return
-            // During a billboard visit, stop this click from also reaching the Works handler.
-            event.stopImmediatePropagation()
-            this.experience.canvas.style.cursor = ''
-            // Ask the animation to return to avenue. Change the button label only after arrival.
-            this.cameraAnimation.exit(() =>
-            {
-                this.button.textContent = '.works'
-            })
-        }, true)
-    }
-
-    // Decide whether a click may visit a billboard or open its website right now.
-    // Wait for the intro and billboard flights to finish, and let Works handle clicks while it is open.
-    // Use this same rule for clicks and hover, so a board only looks clickable when it really is.
+    // Allow clicks and the hand cursor only when the dashboard permits them and the boards are visible.
+    // Hidden boards must not catch clicks, even if their clickable setting is left on.
     get canPick()
     {
-        return !this.experience.world.intro.active && !this.experience.works?.active && !this.cameraAnimation.flight
+        return this.group.visible && this.experience.stateManager.settings.billboards.clickable
     }
 
     setBoxes()
@@ -367,8 +342,9 @@ export default class Billboards
         }
 
         // A hand shows that the billboard is clickable; empty space uses the normal cursor.
-        // Let Works control its own cursor while open, including its camera transitions.
-        if(!this.experience.works?.active)
+        // Only update the cursor when the shared recipe gives billboard clicks control.
+        // State.js clears it during flights; Works handles its own labels after arrival.
+        if(this.canPick)
         {
             this.experience.canvas.style.cursor = this.currentIntersect ? 'pointer' : ''
         }

@@ -5,6 +5,7 @@ import Sizes from './Utils/Sizes.js'
 import Time from './Utils/Time.js'
 import Mouse from './Utils/Mouse.js'
 import Camera from './Camera.js'
+import State from './State.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Works from './Works/Works.js'
@@ -41,6 +42,8 @@ export default class Experience
         this.resources = new Resources(sources)
         this.mouse = new Mouse()
         this.camera = new Camera()
+        // One recipe controls flights, settled views, user input and the shared button.
+        this.stateManager = new State(this)
         this.renderer = new Renderer()
         this.postProcessing = new PostProcessing()
         this.world = new World()
@@ -64,6 +67,8 @@ export default class Experience
         this.resources.on('ready', () =>
         {
             this.works = new Works(this)
+            // Start only after both the world and Works exist, including when debug skips the intro duration.
+            this.stateManager.startIntro()
             this.time.on('tick', () =>
             {
                 this.update()

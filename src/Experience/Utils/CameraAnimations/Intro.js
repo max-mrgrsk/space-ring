@@ -5,7 +5,7 @@ import { avenue } from './namedViews.js'
 export default class Intro
 {
     // Prepare the intro using the named avenue view as its destination.
-    constructor()
+    constructor(complete)
     {
         this.experience = new Experience
         this.camera = this.experience.camera.instance
@@ -14,13 +14,11 @@ export default class Intro
         this.debug = this.experience.debug
 
         this.avenueView = avenue(this.experience.world.spaceStation.parameters)
-        this.setAnimation() 
+        this.setAnimation(complete)
     }
     // Fly into the avenue, moving both the camera and the point it looks at.
-    setAnimation()
+    setAnimation(complete)
     {
-        // Billboards wait until this is false. Include the delay before the camera starts moving.
-        this.active = true
         if(this.debug.active)
         {
             this.delay = 0
@@ -49,16 +47,10 @@ export default class Intro
                 x: this.avenueView.target.x,
                 y: this.avenueView.target.y,
                 z: this.avenueView.target.z,
-                // Both parts of the intro have arrived; billboard clicks can now begin.
-                onComplete: () =>
-                {
-                    this.active = false
-                },
-                // Opening Works can stop the intro early. Back must still leave billboards clickable.
-                onInterrupt: () =>
-                {
-                    this.active = false
-                }
+                // Mouse controls are off, so the intro must aim the camera at its moving target itself.
+                onUpdate: () => this.camera.lookAt(this.target),
+                // Both parts have arrived. Tell the state manager to apply the station recipe.
+                onComplete: complete
             })
     }
 }
