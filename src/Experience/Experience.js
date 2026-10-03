@@ -41,7 +41,7 @@ export default class Experience
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
         this.mouse = new Mouse()
-        this.camera = new Camera()
+        this.camera = new Camera(this)
         // One recipe controls flights, settled views, user input and the shared button.
         this.stateManager = new State(this)
         this.renderer = new Renderer()
