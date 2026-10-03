@@ -1,11 +1,10 @@
 import * as THREE from 'three'
-import Experience from '../Experience'
 
 export default class Mouse
 {
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.sizes = this.experience.sizes
         
         this.instance = new THREE.Vector2()

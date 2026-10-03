@@ -40,7 +40,7 @@ export default class Experience
         this.time = new Time()
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
-        this.mouse = new Mouse()
+        this.mouse = new Mouse(this)
         this.camera = new Camera(this)
         // One recipe controls flights, settled views, user input and the shared button.
         this.stateManager = new State(this)
