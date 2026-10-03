@@ -11,7 +11,7 @@ export default class Mouse
 
         window.addEventListener
         (
-            'mousemove', () =>
+            'mousemove', event =>
             {
 
                 this.instance.x = event.clientX / this.sizes.width * 2 - 1
