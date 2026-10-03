@@ -25,7 +25,6 @@ export default class SpaceCars
     }
     setParameters()
     {
-        // this.parameters = this.experience.world.stationParameters.parameters
 
         this.parameters = {}
         this.parameters.amountOfCars = 1000

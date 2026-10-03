@@ -1,18 +1,4 @@
 export default [
-    // Environment
-    // {
-    //     name: 'environmentMapTexture',
-    //     type: 'cubeTexture',
-    //     path:
-    //     [
-    //         '/textures/environmentMaps/0/px.jpg',
-    //         '/textures/environmentMaps/0/nx.jpg',
-    //         '/textures/environmentMaps/0/py.jpg',
-    //         '/textures/environmentMaps/0/ny.jpg',
-    //         '/textures/environmentMaps/0/pz.jpg',
-    //         '/textures/environmentMaps/0/nz.jpg'
-    //     ]
-    // },
     // Billboard images and their websites.
     // Edit each image's path and url here; moving its whole entry keeps the pair together.
     // Textures with a url become billboards. Other resources can omit url.
@@ -112,22 +98,4 @@ export default [
         path: '/textures/works/woodworking.jpg',
         url: 'https://www.youtube.com/watch?v=hs4sur3MTwM&t=12s'
     },
-    // Stars
-    // {   
-    //     name: 'star',
-    //     type: 'texture',
-    //     path: '/textures/particles/5.png'
-    // },
-    // Post Processing
-    // {   
-    //     name: 'interfaceNormalMap',
-    //     type: 'texture',
-    //     path: 'textures/postProcessing/interfaceNormalMap.png'
-    // }
-    // 3D Models
-    // {
-    //     name: 'damagedHelmet',
-    //     type: 'gltfModel',
-    //     path: 'models/DamagedHelmet/glTF/DamagedHelmet.gltf'
-    // }
 ]

@@ -30,7 +30,6 @@ export default class SpaceStation
     }
     setParameters()
     {
-        // this.parameters = this.experience.world.stationParameters.parameters
 
         this.parameters = {}
         

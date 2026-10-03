@@ -88,7 +88,6 @@ export default class Experience
     {
         this.stats.begin()
         
-        // this.mouse.update()
         this.camera.update()
         this.world.update()
         this.works?.update()

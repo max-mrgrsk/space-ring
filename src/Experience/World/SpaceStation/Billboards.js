@@ -81,7 +81,6 @@ export default class Billboards
         {
             // Angles
             var angles = i * this.parameters.angle 
-            // angles = - (angles + Math.PI / 2)
             angles = - (angles + 3)
             this.parameters.angles.push(angles)
 
@@ -189,8 +188,6 @@ export default class Billboards
 
         this.raycaster = new THREE.Raycaster()  
 
-        // this.arrowHelper = new THREE.ArrowHelper(this.rayDirection, this.rayOrigin, 5, 0xff0000);
-        // this.scene.add(this.arrowHelper);
 
         this.currentIntersect = null
 
@@ -201,9 +198,6 @@ export default class Billboards
         // The shared helper ignores drags and pinches; canPick decides when clicks are allowed.
         onClick(this.experience.canvas, event => this.onRaycasterClick(event), () => this.canPick)
 
-        // Handle touch start
-        // window.addEventListener('touchstart', this.onRaycasterClick.bind(this));
-        // window.addEventListener('touchend', this.onRaycasterClick.bind(this));
 
 
 
