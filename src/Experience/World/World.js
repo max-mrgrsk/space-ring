@@ -23,7 +23,7 @@ export default class World
         this.resources.on('ready', () =>
         {
             // Setup
-            this.spaceStation = new SpaceStation()
+            this.spaceStation = new SpaceStation(this.experience)
             this.spaceCars = new SpaceCars()
             this.canyonCars = new CanyonCars
             this.billboards = new Billboards()
