@@ -43,8 +43,6 @@ export default class Billboards
         this.textures.forEach(texture => {
             texture.colorSpace = THREE.SRGBColorSpace;
             })
-
-        console.log('amount of works:', this.textures.length)
     }
     setParameters()
     {
