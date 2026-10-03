@@ -15,19 +15,10 @@ import PostProcessing from './Utils/PostProcessing.js'
 
 import Stats from 'stats.js'
 
-let instance = null
-
 export default class Experience
 {
     constructor(canvas)
     {
-        // Singleton
-        if(instance)
-        {
-            return instance
-        }
-        instance = this
-        
         // Global access
         window.experience = this
 
