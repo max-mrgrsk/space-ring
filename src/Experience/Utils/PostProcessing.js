@@ -2,7 +2,6 @@
 import * as THREE from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import Experience from '../Experience'
 
 // import custom render target
 import { Vector3, WebGLRenderTarget } from 'three'
@@ -31,10 +30,10 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js' // atia
 
 export default class PostProcessing
 {
-    constructor()
+    constructor(experience)
     {        
         // Debug
-        this.experience = new Experience()
+        this.experience = experience
         this.sizes = this.experience.sizes
         this.renderer = this.experience.renderer
         this.scene = this.experience.scene

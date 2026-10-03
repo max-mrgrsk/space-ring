@@ -45,7 +45,7 @@ export default class Experience
         // One recipe controls flights, settled views, user input and the shared button.
         this.stateManager = new State(this)
         this.renderer = new Renderer(this)
-        this.postProcessing = new PostProcessing()
+        this.postProcessing = new PostProcessing(this)
         this.world = new World()
         this.stats = new Stats()
 
