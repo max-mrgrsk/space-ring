@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
 
 // mesh merger
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -7,9 +6,9 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 
 export default class Player
 {
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.scene = this.experience.scene
         this.debug = this.experience.debug
         this.time  = this.experience.time

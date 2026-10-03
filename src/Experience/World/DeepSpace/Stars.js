@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
 
 // Shaders
 import starVertexShader from '../../shaders/starShader/starVertexShader.glsl'
@@ -7,9 +6,9 @@ import starFragmentShader from '../../shaders/starShader/starFragmentShader.glsl
 
 export default class Stars
 {
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.time = this.experience.time

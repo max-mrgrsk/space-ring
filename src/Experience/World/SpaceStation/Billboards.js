@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
 import onClick from '../../Utils/Click.js'
 import pickObject from '../../Utils/PickObject.js'
 import BillboardAnimation from '../../Utils/CameraAnimations/Billboards.js'
@@ -12,9 +11,9 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 export default class Billboards
 {
     // Build the billboards and prepare their clicks and camera animation.
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.scene = this.experience.scene
         this.debug = this.experience.debug
         this.time = this.experience.time

@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
 
 // import shaders
 import sunVertexShader from '../../shaders/sunShader/sunVertexShader.glsl'
@@ -7,9 +6,9 @@ import sunFragmentShader from '../../shaders/sunShader/sunFragmentShader.glsl'
 
 export default class Sun
 {
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.scene = this.experience.scene
         this.debug = this.experience.debug
         this.camera = this.experience.camera.instance

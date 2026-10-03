@@ -24,14 +24,14 @@ export default class World
         {
             // Setup
             this.spaceStation = new SpaceStation(this.experience)
-            this.spaceCars = new SpaceCars()
-            this.canyonCars = new CanyonCars
-            this.billboards = new Billboards()
-            this.player = new Player()
+            this.spaceCars = new SpaceCars(this.experience)
+            this.canyonCars = new CanyonCars(this.experience)
+            this.billboards = new Billboards(this.experience)
+            this.player = new Player(this.experience)
 
-            this.stars = new Stars()
-            this.sun = new Sun()
-            this.satellites = new Satellites()
+            this.stars = new Stars(this.experience)
+            this.sun = new Sun(this.experience)
+            this.satellites = new Satellites(this.experience)
         })
     }
 
