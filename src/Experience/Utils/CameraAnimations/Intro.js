@@ -1,13 +1,12 @@
 import gsap from 'gsap' // animation. install command: npm install --save gsap@3.5.1
-import Experience from '../../Experience'
 import { avenue } from './namedViews.js'
 
 export default class Intro
 {
     // Prepare the intro using the named avenue view as its destination.
-    constructor(complete)
+    constructor(experience, complete)
     {
-        this.experience = new Experience
+        this.experience = experience
         this.camera = this.experience.camera.instance
         this.target = this.experience.camera.controls.target
         this.resources = this.experience.resources

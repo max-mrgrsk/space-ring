@@ -59,7 +59,7 @@ export default class State
     startIntro()
     {
         this.applyVisibility('station')
-        new Intro(() => this.settleAt('station'))
+        new Intro(this.experience, () => this.settleAt('station'))
     }
 
     // Begin a trip: lock interaction, show the objects needed along the way, then start the animation.
