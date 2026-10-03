@@ -11,7 +11,7 @@ export default class Satellites
         this.scene = this.experience.scene
         this.time = this.experience.time
         this.debug = this.experience.debug
-        
+
         this.setParameters()
         this.setGeometry()
         this.setMaterial()
@@ -55,7 +55,7 @@ export default class Satellites
         this.bodyMaterial.dispose()
         this.bodyMaterial = null
 
-        
+
 
         // wings
         this.wingMesh.geometry.dispose()
@@ -88,7 +88,7 @@ export default class Satellites
             const radius = normalizedRadius * (this.parameters.satellitesMaxRadius - this.parameters.satellitesMinRadius) + this.parameters.satellitesMinRadius
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
-            
+
             const x = radius * Math.sin(phi) * Math.cos(theta);
             const y = radius * Math.sin(phi) * Math.sin(theta);
             const z = radius * Math.cos(phi);
@@ -129,7 +129,7 @@ export default class Satellites
 
         this.bodyMesh = new THREE.Mesh( this.mergedBodyGeometry, this.bodyMaterial )
         this.wingMesh = new THREE.Mesh( this.mergedWingGeometry, this.wingMaterial )
-        
+
         this.group.add(this.bodyMesh)
         this.group.add(this.wingMesh)
     }

@@ -64,7 +64,7 @@ export default class Experience
                 this.update()
             })
         })
-        
+
     }
 
     resize()
@@ -78,7 +78,7 @@ export default class Experience
     update()
     {
         this.stats.begin()
-        
+
         this.camera.update()
         this.world.update()
         this.works?.update()

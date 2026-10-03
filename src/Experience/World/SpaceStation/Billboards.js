@@ -49,7 +49,7 @@ export default class Billboards
         this.parameters.worksSize = 0.25
         this.parameters.worksCellSize = 0.03
 
-        // Imported 
+        // Imported
         this.world = this.experience.world
         this.parameters.stationRadius = this.world.spaceStation.parameters.stationRadius
         this.parameters.houseMaxHeight = this.world.spaceStation.parameters.houseMaxHeight
@@ -75,11 +75,11 @@ export default class Billboards
         this.parameters.rotationX = []
         this.parameters.rotationY = []
         this.parameters.rotationZ = []
-        
+
         for(let i=0; i < this.textures.length; i++)
         {
             // Angles
-            var angles = i * this.parameters.angle 
+            var angles = i * this.parameters.angle
             angles = - (angles + 3)
             this.parameters.angles.push(angles)
 
@@ -89,7 +89,7 @@ export default class Billboards
             do { positionX = (Math.random() - 0.5) * 2
             } while (positionX >= -cleanMiddle && positionX <= cleanMiddle)
             positionX *= (this.parameters.stationWidth / 2 - this.parameters.worksSize / 2)
-            
+
             const positionY = Math.sin(angles) * this.parameters.billBoardRadius
             const positionZ = Math.cos(angles) * this.parameters.billBoardRadius
 
@@ -122,7 +122,7 @@ export default class Billboards
     disposeWorks()
     {
         this.scene.remove(this.group)
-        
+
         this.group.remove(this.SpaseStationMesh)
         this.group = null
 
@@ -147,14 +147,14 @@ export default class Billboards
         this.worksPlaneGeometry = new THREE.PlaneGeometry(
             this.parameters.worksSize,
             this.parameters.worksSize)
-        
+
         this.imagesArray = []
         // Build each board from its own entry; i is only used to place it around the ring.
         for(const [i, billboard] of this.billboardSources.entries())
         {
             // 1. Material
             this.texture = this.resources.items[billboard.name]
-            this.worksMaterial = new THREE.MeshBasicMaterial({ 
+            this.worksMaterial = new THREE.MeshBasicMaterial({
                 map: this.texture,
                 side: THREE.DoubleSide })
 
@@ -163,7 +163,7 @@ export default class Billboards
             this.worksMesh.name = billboard.name;
             // Keep the website on the board itself, so opening it never depends on a list position.
             this.worksMesh.userData.url = billboard.url
-            
+
             // 3. Position
             this.worksMesh.position.x = this.parameters.positionX[i]
             this.worksMesh.position.y = this.parameters.positionY[i]
@@ -175,7 +175,7 @@ export default class Billboards
             // 5. Add to group
             this.imagesArray.push(this.worksMesh)
             this.group.add(this.worksMesh)
-        }        
+        }
     }
     // Prepare to find the billboard under the mouse and respond to deliberate clicks or taps.
     // Dragging the view must not accidentally select a board.
@@ -185,7 +185,7 @@ export default class Billboards
         this.rayDirection = new THREE.Vector3(0,0,-1)
         this.rayDirection.normalize()
 
-        this.raycaster = new THREE.Raycaster()  
+        this.raycaster = new THREE.Raycaster()
 
 
         this.currentIntersect = null
@@ -288,7 +288,7 @@ export default class Billboards
         {
             this.debugFoloder = this.debug.ui.addFolder('Works')
             this.debugFoloder.close()
-            
+
             this.debugFoloder.add(this.parameters, 'worksSize', 0.01, 1, 0.01)
                 .onChange( () => {this.updateWorks()} )
             this.debugFoloder.add(this.parameters, 'worksCellSize', 0.01, 0.5, 0.01)
@@ -311,7 +311,7 @@ export default class Billboards
 
         this.raycaster.setFromCamera(this.mouse, this.camera)
         this.intersects = this.canPick ? this.raycaster.intersectObjects(this.imagesArray) : []
-        
+
         // reset color
         for(const image of this.imagesArray)
         {

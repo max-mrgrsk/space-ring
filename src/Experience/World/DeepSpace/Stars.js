@@ -75,7 +75,7 @@ export default class Stars
             const radius = normalizedRadius * (this.parameters.spaceMaxRadius - this.parameters.spaceMinRadius) + this.parameters.spaceMinRadius
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
-            
+
             const x = radius * Math.sin(phi) * Math.cos(theta);
             const y = radius * Math.sin(phi) * Math.sin(theta);
             const z = radius * Math.cos(phi);
@@ -96,7 +96,7 @@ export default class Stars
             this.sizes[i] = normalizedRadius;
             this.scales[i] = Math.random();
         }
-        
+
         // create buffergeometry and add this numbers as locations
         this.geometry = new THREE.BufferGeometry()
         this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions,3))

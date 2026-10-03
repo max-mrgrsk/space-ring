@@ -14,13 +14,13 @@ export default class SpaceStation
 {
     constructor(experience)
     {
-        
+
 
         this.experience = experience
         this.scene = this.experience.scene
         this.time = this.experience.time
         this.debug = this.experience.debug
-        
+
         this.setParameters()
         this.setGeometry()
         this.setMaterial()
@@ -31,7 +31,7 @@ export default class SpaceStation
     {
 
         this.parameters = {}
-        
+
         this.parameters.stationRadius = 3
         this.parameters.stationWidth = 1
         this.parameters.rotationSpeed = 0.0001
@@ -62,7 +62,7 @@ export default class SpaceStation
         this.SpaseStationMesh.geometry.dispose()
         this.SpaseStationMesh.material.dispose()
         this.SpaseStationMesh = null
-        
+
         this.mergedGeometry.dispose()
         this.mergedGeometry = null
     }
@@ -147,7 +147,7 @@ export default class SpaceStation
         {
             this.debugFoloder = this.debug.ui.addFolder('SpaceStation')
             this.debugFoloder.close()
-            
+
             this.debugFoloder.add(this.parameters, 'stationRadius', 0.1, 10, 0.1)
                 .onChange( () => {this.updateSpaceStation()} )
             this.debugFoloder.add(this.parameters, 'stationWidth', 0.1, 10, 0.1)

@@ -9,7 +9,7 @@ varying vec2 vUv;
 
 void main()
 {
-    
+
 
     // v01 from the lesson ---------------------------------------------------
     // vec2 shiftedUV = vUv;

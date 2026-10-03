@@ -64,13 +64,13 @@ export default class CanyonCars
             // 1. Parameters
             const radius = this.stationRadius - Math.random() * 0.4
             const angle = Math.random() * Math.PI * 2
-            
+
             // 2. Geometries
             const box = new THREE.BoxGeometry(
                 2 * this.parameters.carScale, // width
                 5 * this.parameters.carScale, // length
                 2 * this.parameters.carScale  // height
-            ) 
+            )
 
             // 3. Rotations
             box.rotateX(-angle)
@@ -105,7 +105,7 @@ export default class CanyonCars
                 .onChange( () => {this.updateCars()} )
             this.debugFolder.add(this.parameters, 'carScale', 0.001, 0.02, 0.001)
                 .onChange( () => {this.updateCars()} )
-        }   
+        }
     }
     update()
     {

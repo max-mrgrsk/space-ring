@@ -15,7 +15,7 @@ export default class Floors
         {
             // 1. Parameters
             const angle = Math.random() * Math.PI * 2
-            
+
             const radius = stationRadius + floorHeight / 2
 
             // 2. Geometries

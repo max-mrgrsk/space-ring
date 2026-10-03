@@ -14,13 +14,13 @@ export default class FacadeHouses
         meshGeometryArray
     )
     {
-        
-        // Parameters corrections       
+
+        // Parameters corrections
         const stripWidth = 0.05
         amountOfHouses *= 0.03 // reduce amount accorting to the valley width valley
         const streetWidth = valleyWidth - stripWidth
 
-        
+
 
         for(let i=0; i < amountOfHouses; i++)
         {
@@ -35,7 +35,7 @@ export default class FacadeHouses
             houseHeight = amountOfFloors * floorHeight
             const facadeWidth = houseWidth * 0.99
             const radius = stationRadius
-            
+
 
             /**
              * 2. Geometries

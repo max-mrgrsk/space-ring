@@ -22,23 +22,23 @@ void main()
 
     // 3.1 Tests
     // v1 ugly violet color inside
-    // float g = 1.0; 
+    // float g = 1.0;
     // float b = color;
 
     // v2 ugly yellow sun
-    // float g = 0.0; 
+    // float g = 0.0;
     // float b = color;
 
     // v3 crazy nice purple color
-    // float g = color; 
+    // float g = color;
     // float b = 1.0;
 
     // v4 crazy nice yellow reallistic sun
-    // float g = color; 
+    // float g = color;
     // float b = 0.0;
 
     // 3.2 final color for green and blue
-    float g = color; 
+    float g = color;
 
     float speed = 0.0005;
     speed = uTime * speed;

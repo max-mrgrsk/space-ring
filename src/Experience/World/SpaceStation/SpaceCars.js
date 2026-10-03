@@ -70,13 +70,13 @@ export default class SpaceCars
             // 1. Parameters
             const radius = this.stationRadius - this.houseMaxHeight - this.parameters.flightHeight
             const angle = Math.random() * Math.PI * 2
-            
+
             // 2. Geometries
             const box = new THREE.BoxGeometry(
                 2 * this.parameters.carScale, // width
                 5 * this.parameters.carScale, // length
                 2 * this.parameters.carScale  // height
-            ) 
+            )
 
             // 3. Rotations
             box.rotateX(-angle)
@@ -100,7 +100,7 @@ export default class SpaceCars
     {
         this.mesh = new THREE.Mesh(this.mergedGeometry, this.material)
         this.meshClone = this.mesh.clone()
-        this.meshClone.rotation.y = Math.PI 
+        this.meshClone.rotation.y = Math.PI
         this.scene.add(this.mesh, this.meshClone)
     }
     setDebug()
@@ -113,7 +113,7 @@ export default class SpaceCars
                 .onChange( () => {this.updateCars()} )
             this.debugFolder.add(this.parameters, 'carScale', 0.001, 0.02, 0.001)
                 .onChange( () => {this.updateCars()} )
-        }   
+        }
     }
     update()
     {

@@ -21,7 +21,7 @@ void main()
     angle += angleOffset;
     modelPosition.y = sin(angle) * distanceToCenter;
     modelPosition.x = cos(angle) * distanceToCenter;
-    
+
 
     // position end
 

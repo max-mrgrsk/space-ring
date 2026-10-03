@@ -14,13 +14,13 @@ export default class StackedHouses
         meshGeometryArray
     )
     {
-        
-        // Parameters corrections       
+
+        // Parameters corrections
         const stripWidth = 0.05
         amountOfHouses *= 0.04 // reduce amount accorting to the valley width valley
         const streetWidth = valleyWidth - stripWidth
 
-        
+
 
         for(let i=0; i < amountOfHouses; i++)
         {
@@ -36,7 +36,7 @@ export default class StackedHouses
             const radius = stationRadius
             const towerHeight = 0.03
             const cylinderHeight = 0.03
-            
+
 
             /**
              * 2. Geometries

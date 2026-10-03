@@ -18,7 +18,7 @@ export default class World
         this.experience = experience
         this.scene = this.experience.scene
         this.resources = this.experience.resources
-        
+
         // Wait for resources
         this.resources.on('ready', () =>
         {
@@ -42,7 +42,7 @@ export default class World
         this.spaceCars.update()
         this.canyonCars.update()
         this.player.update()
-        
+
         this.stars.update()
         this.sun.update()
         this.satellites.update()

@@ -14,13 +14,13 @@ export default class SlabHouses
         meshGeometryArray
     )
     {
-        
-        // Parameters corrections       
+
+        // Parameters corrections
         const stripWidth = 0.05
         amountOfHouses *= 0.06 // reduce amount accorting to the valley width valley
         const streetWidth = valleyWidth - stripWidth
 
-        
+
 
         for(let i=0; i < amountOfHouses; i++)
         {
@@ -34,7 +34,7 @@ export default class SlabHouses
             const floorHeight = houseHeight / amountOfFloors
             houseHeight = amountOfFloors * floorHeight
             const radius = stationRadius
-            
+
 
             /**
              * 2. Geometries

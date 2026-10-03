@@ -7,7 +7,7 @@ export default class StationParameters
     setParameters()
     {
         this.parameters = {}
-        
+
         /**
          * Space Station
          */

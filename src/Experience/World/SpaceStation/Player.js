@@ -75,7 +75,7 @@ export default class Player
             1, // width
             2, // height
             4  // length
-        ) 
+        )
         /**
          * 2. Wing
          */
@@ -197,7 +197,7 @@ export default class Player
             turbineCap1,
             turbineCap2,
             cockpit)
-        
+
         this.mergedGeometry = BufferGeometryUtils.mergeGeometries(this.geometry)
     }
     setMaterial()
@@ -234,22 +234,22 @@ export default class Player
                 .onChange( () => {this.updatePlayer()} )
             this.debugFolder.add(this.parameters, 'turbineCapOffset', -3, 3, 0.01)
                 .onChange( () => {this.updatePlayer()} )
-        }   
+        }
     }
     update()
     {
-        
+
         this.mesh.position.x = Math.sin( this.time.elapsed * this.parameters.rotationSpeed * 1.2 ) * 0.002
         this.mesh.rotation.z = Math.sin(this.time.elapsed * this.parameters.rotationSpeed * 1.2 ) * 0.2
 
-        this.mesh.position.y = 
-            this.playerHeight 
-            + this.parameters.flightHeight 
+        this.mesh.position.y =
+            this.playerHeight
+            + this.parameters.flightHeight
             + Math.sin( this.time.elapsed * this.parameters.rotationSpeed ) * 0.002
         this.mesh.rotation.x = Math.sin(this.time.elapsed * this.parameters.rotationSpeed) * 0.2
-        
+
         this.mesh.position.z = Math.sin( this.time.elapsed * this.parameters.rotationSpeed * 0.7 ) * 0.002
-        
-        
+
+
     }
 }

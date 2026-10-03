@@ -13,7 +13,7 @@ export default class Renderer
         this.debug = this.experience.debug
 
         // this.postProcessing = this.experience.postProcessing
-        // as the PostProcessing is initiated after the Renderer - 
+        // as the PostProcessing is initiated after the Renderer -
         // you can not fetch it here, but you can receive all you need in
         // the update section passing it directly from expericne update function
 
@@ -47,7 +47,7 @@ export default class Renderer
         // 1. Render with normal renderer
         // this.instance.render(this.scene, this.camera.instance)
 
-        // 2. Render with EffectComposer, render passes add Post processing        
+        // 2. Render with EffectComposer, render passes add Post processing
         // passed directly from the einvironment
         // postProcessing.render()
 

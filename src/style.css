@@ -19,7 +19,7 @@ body
     touch-action: none; /* Let the scene handle touch gestures instead of browser scrolling or pinch-to-zoom. */
 }
 
-.section 
+.section
 {
     position: relative; /* Sets the position property of elements to "relative" */
     font-family: 'Cabin', sans-serif; /* Sets the font family for text in elements  */

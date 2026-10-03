@@ -75,6 +75,6 @@ export default class Sun
     {
         this.mesh.lookAt(this.camera.position)
         this.material.uniforms.uTime.value = this.time.elapsed
-        
+
     }
 }

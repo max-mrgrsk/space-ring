@@ -31,7 +31,7 @@ import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js' // atia
 export default class PostProcessing
 {
     constructor(experience)
-    {        
+    {
         // Debug
         this.experience = experience
         this.sizes = this.experience.sizes
@@ -47,11 +47,11 @@ export default class PostProcessing
 
         // v1 - standard composer with no antialising method
         // this.effectComposer = new EffectComposer(this.renderer.instance) // Eadd extra step before display
-        
+
         // v2 - with antialising
         // provide to effectComposer a custom render target with antialising metod
         // step 1 - create custom render target with antialising method
-        this.renderTarget = new WebGLRenderTarget(800, 600, 
+        this.renderTarget = new WebGLRenderTarget(800, 600,
             {
                 // step 3 - add antialising samples 2 for shit screens, 0 for retina
                 // this part may not work in safari and other shit browthers
@@ -61,7 +61,7 @@ export default class PostProcessing
         this.effectComposer = new EffectComposer(this.renderer.instance, this.renderTarget)
         this.effectComposer.setPixelRatio(this.sizes.pixelRatio)
         this.effectComposer.setSize(this.sizes.width, this.sizes.height)
-        
+
         /**
          * enable render passes
          */
@@ -112,7 +112,7 @@ export default class PostProcessing
 
         // 2.1 Tint pass
         this.TintShader = {
-            uniforms: 
+            uniforms:
             {
                 tDiffuse: { value : null },
                 uTint: { value : null }
@@ -127,7 +127,7 @@ export default class PostProcessing
 
         // 2.2 Displacement pass
         this.displacementShader = {
-            uniforms: 
+            uniforms:
             {
                 tDiffuse: { value : null },
                 uTime: { value : null }
@@ -142,7 +142,7 @@ export default class PostProcessing
 
         // 2.3 Normal Map Displacement pass
         this.normalMapShader = {
-            uniforms: 
+            uniforms:
             {
                 tDiffuse: { value : null },
                 uNormalMap: { value : null }
@@ -187,7 +187,7 @@ export default class PostProcessing
         {
             this.debugFolder = this.debug.ui.addFolder('post processing')
             this.debugFolder.close()
-            
+
             this.debugFolder.add(this.dotScreenPass, 'enabled').name('dotScreenPass')
             this.debugFolder.add(this.glitchPass, 'enabled').name('glitchPass')
             this.debugFolder.add(this.glitchPass, 'goWild').name('glitchPassWild')
@@ -205,7 +205,7 @@ export default class PostProcessing
             this.debugFolder.add(this.pixelatePass, 'enabled').name('pixelatePass')
             this.debugFolder.add(this.gammaCorrectionPass, 'enabled').name('sRGB')
             if(this.smaaPass){this.debugFolder.add(this.smaaPass, 'enabled').name('smaaPass')}
-            
+
         }
     }
 
