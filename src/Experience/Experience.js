@@ -46,7 +46,7 @@ export default class Experience
         this.stateManager = new State(this)
         this.renderer = new Renderer(this)
         this.postProcessing = new PostProcessing(this)
-        this.world = new World()
+        this.world = new World(this)
         this.stats = new Stats()
 
         // Stats panel

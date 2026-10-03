@@ -1,5 +1,3 @@
-import Experience from '../Experience.js'
-
 // import Space Station
 import SpaceStation from './SpaceStation/SpaceStation.js'
 import Billboards from './SpaceStation/Billboards.js'
@@ -15,9 +13,9 @@ import Sun from './DeepSpace/Sun.js'
 
 export default class World
 {
-    constructor()
+    constructor(experience)
     {
-        this.experience = new Experience()
+        this.experience = experience
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         
