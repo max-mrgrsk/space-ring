@@ -48,7 +48,6 @@ export default class Experience
         this.postProcessing = new PostProcessing()
         this.world = new World()
         this.stats = new Stats()
-        // this.animation = new Animation()
 
         // Stats panel
         if(this.debug.active)
@@ -100,8 +99,6 @@ export default class Experience
         this.renderer.update(this.postProcessing)
         // update PostProcessing for time in shaders
         this.postProcessing.update()
-
-        // this.animation.update()
 
         this.stats.end()
     }
