@@ -21,7 +21,6 @@ export default class FacadeHouses
         const streetWidth = valleyWidth - stripWidth
 
         
-        // console.log(SlabHouse)
 
         for(let i=0; i < amountOfHouses; i++)
         {

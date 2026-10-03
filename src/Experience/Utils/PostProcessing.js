@@ -172,7 +172,6 @@ export default class PostProcessing
 
         // enable antialising for shit browsers
         // SMAA Pass
-        // console.log(this.renderer.instance.capabilities)
         if(this.renderer.instance.getPixelRatio() === 1 && !this.renderer.instance.capabilities.isWebGL2)
         {
             this.smaaPass = new SMAAPass()

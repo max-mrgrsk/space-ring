@@ -329,13 +329,11 @@ export default class Billboards
         if(this.intersects.length)
         {
 
-            // if(this.currentIntersect === null) { console.log('mouse enter', this.intersects[0].object.name) }
             this.currentIntersect = this.intersects[0]
             this.currentIntersect.object.material.color.set('#ffbb22')
         }
         else
         {
-            // if(this.currentIntersect){console.log('mosue leave')}
             this.currentIntersect = null
         }
 

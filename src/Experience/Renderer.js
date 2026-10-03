@@ -53,7 +53,6 @@ export default class Renderer
         // postProcessing.render()
 
         // 3. turn postprocessing on and off again
-        // console.log(this.time.elapsed)
         // if(this.time.elapsed<2000){postProcessing.render()}else{this.instance.render(this.scene, this.camera.instance)}
 
         // 4. combination of 1 and 3
