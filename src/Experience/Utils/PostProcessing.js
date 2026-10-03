@@ -18,8 +18,8 @@ import { RenderPixelatedPass } from 'three/addons/postprocessing/RenderPixelated
 // import custom shaders
 import tintVertexShader from '../shaders/tintShader/tintVertexShader.glsl'
 import tintFragmentShader from '../shaders/tintShader/tintFragmentShader.glsl'
-import dispacementVertexShader from '../shaders/dispacementShader/dispacementVertexShader.glsl'
-import dispacementFragmentShader from '../shaders/dispacementShader/dispacementFragmentShader.glsl'
+import displacementVertexShader from '../shaders/displacementShader/displacementVertexShader.glsl'
+import displacementFragmentShader from '../shaders/displacementShader/displacementFragmentShader.glsl'
 import normalMapVertexShader from '../shaders/normalMapShader/normalMapVertexShader.glsl'
 import normalMapFragmentShader from '../shaders/normalMapShader/normalMapFragmentShader.glsl'
 
@@ -127,19 +127,19 @@ export default class PostProcessing
         this.effectComposer.addPass(this.tintPass)
 
         // 2.2 Displacement pass
-        this.DispacementShader = {
+        this.displacementShader = {
             uniforms: 
             {
                 tDiffuse: { value : null },
                 uTime: { value : null }
             },
-            vertexShader: dispacementVertexShader,
-            fragmentShader: dispacementFragmentShader
+            vertexShader: displacementVertexShader,
+            fragmentShader: displacementFragmentShader
         }
-        this.dispacementPass = new ShaderPass(this.DispacementShader)
-        this.dispacementPass.enabled = true
-        this.dispacementPass.material.uniforms.uTime.value = 0
-        this.effectComposer.addPass(this.dispacementPass)
+        this.displacementPass = new ShaderPass(this.displacementShader)
+        this.displacementPass.enabled = true
+        this.displacementPass.material.uniforms.uTime.value = 0
+        this.effectComposer.addPass(this.displacementPass)
 
         // 2.3 Normal Map Displacement pass
         this.normalMapShader = {
@@ -201,7 +201,7 @@ export default class PostProcessing
             this.debugFolder.add(this.tintPass.material.uniforms.uTint.value, 'x', -1, 1).name('tintPassR')
             this.debugFolder.add(this.tintPass.material.uniforms.uTint.value, 'y', -1, 1).name('tintPassG')
             this.debugFolder.add(this.tintPass.material.uniforms.uTint.value, 'z', -1, 1).name('tintPassB')
-            this.debugFolder.add(this.dispacementPass, 'enabled').name('dispacementPass')
+            this.debugFolder.add(this.displacementPass, 'enabled').name('displacementPass')
             this.debugFolder.add(this.normalMapPass, 'enabled').name('normalMapPass')
             this.debugFolder.add(this.pixelatePass, 'enabled').name('pixelatePass')
             this.debugFolder.add(this.gammaCorrectionPass, 'enabled').name('sRGB')
@@ -224,6 +224,6 @@ export default class PostProcessing
 
     update()
     {
-        this.dispacementPass.material.uniforms.uTime.value = this.time.elapsed
+        this.displacementPass.material.uniforms.uTime.value = this.time.elapsed
     }
 }
