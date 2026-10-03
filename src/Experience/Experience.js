@@ -44,7 +44,7 @@ export default class Experience
         this.camera = new Camera(this)
         // One recipe controls flights, settled views, user input and the shared button.
         this.stateManager = new State(this)
-        this.renderer = new Renderer()
+        this.renderer = new Renderer(this)
         this.postProcessing = new PostProcessing()
         this.world = new World()
         this.stats = new Stats()
