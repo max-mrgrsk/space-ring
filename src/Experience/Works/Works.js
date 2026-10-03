@@ -74,6 +74,15 @@ export default class Works
         // Find which 3D label the pointer is over, for the hand cursor and link clicks.
         this.labels = this.cards.map(card => card.label)
 
+        this.setInput()
+
+        // Initial layout
+        this.resize()
+    }
+
+    // Set up scrolling, dragging, tapping labels to open links, and the hover cursor.
+    setInput()
+    {
         // Scrolling
         window.addEventListener('wheel', event =>
         {
@@ -182,9 +191,6 @@ export default class Works
             this.pointerClient = null
             this.canvas.style.cursor = ''
         })
-
-        // Initial layout
-        this.resize()
     }
 
     // Use the dashboard's click setting. Hidden Works labels must never open a website.
