@@ -63,7 +63,6 @@ export default class SpaceStation
         this.SpaceStationMesh.material.dispose()
         this.SpaceStationMesh = null
 
-        this.mergedGeometry.dispose()
         this.mergedGeometry = null
     }
     setGeometry()
