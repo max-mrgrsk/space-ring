@@ -60,6 +60,7 @@ export default class SpaceStation
         this.group.remove(this.SpaceStationMesh)
 
         this.SpaceStationMesh.geometry.dispose()
+        this.SpaceStationWireframeMesh.geometry.dispose()
         this.SpaceStationMesh.material.dispose()
         this.SpaceStationMesh = null
 
