@@ -57,11 +57,11 @@ export default class SpaceStation
     disposeSpaceStation()
     {
         this.scene.remove(this.group)
-        this.group.remove(this.SpaseStationMesh)
+        this.group.remove(this.SpaceStationMesh)
 
-        this.SpaseStationMesh.geometry.dispose()
-        this.SpaseStationMesh.material.dispose()
-        this.SpaseStationMesh = null
+        this.SpaceStationMesh.geometry.dispose()
+        this.SpaceStationMesh.material.dispose()
+        this.SpaceStationMesh = null
 
         this.mergedGeometry.dispose()
         this.mergedGeometry = null
